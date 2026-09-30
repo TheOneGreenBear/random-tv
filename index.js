@@ -13,13 +13,13 @@ const POOL_PAGES = Array.from({ length: Math.ceil(POOL_SIZE / 100) }, (_, i) => 
 
 const manifest = {
   id: 'community.randomtv',
-  version: '2.0.0',
+  version: '2.0.1',
   name: 'Random TV',
   description: '10 movie channels, each already part-way through. Like channel surfing.',
   resources: ['catalog', 'meta'],
   types: ['movie'],
   idPrefixes: ['tt'],
-  catalogs: [{ type: 'movie', id: 'random-tv', name: 'Now Showing' }],
+  catalogs: [{ type: 'movie', id: 'random-tv', name: 'Random Movie (changes through the day)' }],
 };
 
 const builder = new addonBuilder(manifest);
