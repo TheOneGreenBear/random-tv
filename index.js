@@ -13,7 +13,7 @@ const POOL_PAGES = Array.from({ length: Math.ceil(POOL_SIZE / 100) }, (_, i) => 
 
 const manifest = {
   id: 'community.randomtv',
-  version: '2.0.1',
+  version: '2.0.2',
   name: 'Random TV',
   description: '10 movie channels, each already part-way through. Like channel surfing.',
   resources: ['catalog', 'meta'],
@@ -170,7 +170,15 @@ builder.defineMetaHandler(async ({ type, id }) => {
   if (type !== 'movie') return { meta: null };
   try {
     const info = await getInfo(id);
-    const meta = info ? info.meta : (await getJSON(`${CINEMETA}/meta/movie/${id}.json`)).meta;
+    const base = info ? info.meta : (await getJSON(`${CINEMETA}/meta/movie/${id}.json`)).meta;
+    // make sure Stremio always treats this as a playable single movie
+    const meta = {
+      ...base,
+      id,
+      type: 'movie',
+      behaviorHints: { ...(base.behaviorHints || {}), defaultVideoId: id, hasScheduledVideos: false },
+    };
+    delete meta.videos;
     return { meta, cacheMaxAge: 60 };
   } catch (e) {
     return { meta: null };
